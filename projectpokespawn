@@ -1,0 +1,210 @@
+local Pokemons = getrenv()["_G"].Pokemon
+local Spawn = getrenv()["_G"].PlayingCheckers
+local pokes = {}
+local searchpoke = {}
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local function First()
+	for i, v in pairs(Pokemons) do
+		if string.sub(i, 1, 4) ~= "Mega" then
+			table.insert(pokes, i)
+		end
+	end
+end
+
+local search = function(one, two)
+	if two:FindFirstChild(one) then
+		return one
+	else
+		return false
+	end
+end
+
+local function Second()
+	-- Instances:
+	local PokemonsGui = Instance.new("ScreenGui")
+	local Frame = Instance.new("Frame")
+	local PokemonList = Instance.new("ScrollingFrame")
+	local Pokemon = Instance.new("TextBox")
+	local Search = Instance.new("TextButton")
+	local MiddleDivider = Instance.new("Frame")
+	local TopDivider = Instance.new("Frame")
+	
+	local RandomWinner = Instance.new("TextButton")
+	
+	--Properties:
+	PokemonsGui.Name = "PokemonsGui"
+	PokemonsGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+	
+	Frame.Parent = PokemonsGui
+	Frame.BackgroundColor3 = Color3.new(1, 1, 1)
+	Frame.BackgroundTransparency = 1
+	Frame.Position = UDim2.new(0.375, 0, 0.25, 0)
+	Frame.Size = UDim2.new(0.25, 0, 0.5, 0)
+	
+	PokemonList.Name = "PokemonList"
+	PokemonList.Parent = Frame
+	PokemonList.BackgroundColor3 = Color3.new(1, 1, 1)
+	PokemonList.Position = UDim2.new(0, 0, 0.1, 0)
+	PokemonList.Size = UDim2.new(1, 0, 0.9, 0)
+	PokemonList.CanvasSize = UDim2.new(0, 0, 0, 0)
+	PokemonList.ScrollBarImageColor3 = Color3.new(0, 0, 0)
+	PokemonList.ScrollBarThickness = 5
+	
+	Pokemon.Name = "Pokemon"
+	Pokemon.Parent = Frame
+	Pokemon.BackgroundColor3 = Color3.new(1, 1, 1)
+	Pokemon.BorderColor3 = Color3.new(0, 0, 0)
+	Pokemon.BorderSizePixel = 0
+	Pokemon.Position = UDim2.new(0.25, 0, 0, 0)
+	Pokemon.Size = UDim2.new(0.5, 0, 0.1, 0)
+	Pokemon.Font = Enum.Font.Cartoon
+	Pokemon.PlaceholderColor3 = Color3.new(0, 0, 0)
+	Pokemon.Text = "Pokemon"
+	Pokemon.TextColor3 = Color3.new(0, 0, 0)
+	Pokemon.TextSize = 25
+	
+	Search.Name = "Search"
+	Search.Parent = Frame
+	Search.BackgroundColor3 = Color3.new(1, 1, 1)
+	Search.BorderColor3 = Color3.new(0, 0, 0)
+	Search.BorderSizePixel = 0
+	Search.Position = UDim2.new(0.75, 0, 0, 0)
+	Search.Size = UDim2.new(0.25, 0, 0.1, 0)
+	Search.Font = Enum.Font.Cartoon
+	Search.Text = "Search"
+	Search.TextColor3 = Color3.new(0, 0, 0)
+	Search.TextSize = 25
+	
+	MiddleDivider.Name = "MiddleDivider"
+	MiddleDivider.Parent = Frame
+	MiddleDivider.BackgroundColor3 = Color3.new(0, 0, 0)
+	MiddleDivider.BorderColor3 = Color3.new(0, 0, 0)
+	MiddleDivider.BorderSizePixel = 0
+	MiddleDivider.Position = UDim2.new(0.25, 0, 0.1, -1)
+	MiddleDivider.Size = UDim2.new(0.75, 0, 0, 1)
+	
+	TopDivider.Name = "TopDivider"
+	TopDivider.Parent = Frame
+	TopDivider.BackgroundColor3 = Color3.new(0, 0, 0)
+	TopDivider.BorderColor3 = Color3.new(0, 0, 0)
+	TopDivider.BorderSizePixel = 0
+	TopDivider.Position = UDim2.new(0.75, 1, 0, -1)
+	TopDivider.Size = UDim2.new(0, 1, 0.1, 0)
+	
+	RandomWinner.Name = "Pick a Winner"
+	RandomWinner.Parent = PokemonsGui
+	RandomWinner.BackgroundColor3 = Color3.new(1, 1, 1)
+	RandomWinner.BorderColor3 = Color3.new(0, 0, 0)
+	RandomWinner.BorderSizePixel = 0
+	RandomWinner.Position = UDim2.new(0.95, 0, 0.475, 0)
+	RandomWinner.Size = UDim2.new(0.05, 0, 0.05, 0)
+	RandomWinner.Font = Enum.Font.Cartoon
+	RandomWinner.Text = "Pick a Winner"
+	RandomWinner.TextColor3 = Color3.new(0, 0, 0)
+	RandomWinner.TextSize = 15
+	
+	-- Scripts:
+	for i, v in pairs(pokes) do
+		local a = Instance.new("TextButton")
+		a.Name = v
+		a.BackgroundColor3 = Color3.new(1, 1, 1)
+		a.Position = UDim2.new(0, 0, 0, (i - 1) * 45)
+		a.Size = UDim2.new(1, 0, 0, 45)
+		a.Font = Enum.Font.Cartoon
+		a.Text = v .. " Pokedex #: " .. Pokemons[v]["Pokedex"]
+		a.TextSize = 25
+		a.Parent = PokemonList
+		PokemonList.CanvasSize = UDim2.new(0, 0, 0, i * 45)
+		local b = Instance.new("TextLabel")
+		b.Name = "Pokedex"
+		b.Size = UDim2.new(0, 45, 0, 45)
+		b.Font = Enum.Font.Cartoon
+		b.Text = i
+		b.TextSize = 25
+		b.Parent = a
+		local c = Instance.new("ImageLabel")
+		c.Name = "Image"
+		c.Size = UDim2.new(0, 45, 0, 45)
+		c.Position = UDim2.new(0, 45, 0, 0)
+		c.Parent = a
+		c.Image = Pokemons[v]["Sprites"]["Front"] or ""
+		a.MouseButton1Click:connect(function()
+			Spawn(v, Players.LocalPlayer.PokemonParty, 100, true)
+		end)
+	end
+	
+	Search.MouseButton1Click:connect(function()
+		local function First()
+			for i = 1, #searchpoke do
+				table.remove(searchpoke, i)
+			end
+			local Pokemon = Pokemon.Text
+			for _, v in pairs(pokes) do
+				if string.find(v, Pokemon) then
+					table.insert(searchpoke, v)
+				end
+			end
+			for _, v in pairs(PokemonList:GetChildren()) do
+				v:Destroy()
+			end
+		end
+		
+		First()
+		
+		local function Second()
+			for i, v in pairs(searchpoke) do
+				local a = Instance.new("TextButton")
+				a.Name = v
+				a.BackgroundColor3 = Color3.new(1, 1, 1)
+				a.Position = UDim2.new(0, 0, 0, (i - 1) * 45)
+				a.Size = UDim2.new(1, 0, 0, 45)
+				a.Font = Enum.Font.Cartoon
+				a.Text = v .. " Pokedex #: " .. Pokemons[v]["Pokedex"]
+				a.TextSize = 25
+				a.Parent = PokemonList
+				PokemonList.CanvasSize = UDim2.new(0, 0, 0, i * 45)
+				local b = Instance.new("TextLabel")
+				b.Name = "Pokedex"
+				b.Size = UDim2.new(0, 45, 0, 45)
+				b.Font = Enum.Font.Cartoon
+				b.Text = i
+				b.TextSize = 25
+				b.Parent = a
+				local c = Instance.new("ImageLabel")
+				c.Name = "Image"
+				c.Size = UDim2.new(0, 45, 0, 45)
+				c.Position = UDim2.new(0, 45, 0, 0)
+				c.Parent = a
+				c.Image = Pokemons[v]["Sprites"]["Front"] or ""
+				a.MouseButton1Click:connect(function()
+					Spawn(v, Players.LocalPlayer.PokemonParty, 100, true)
+				end)
+			end
+		end
+		
+		Second()
+	end)
+	
+	RandomWinner.MouseButton1Click:connect(function()
+		local Player = Players:GetChildren()[math.random(#Players:GetChildren())]
+		local Pokemon = pokes[math.random(#pokes)]
+		local Name = Player.Name
+		local Msg = "Congratulation to " .. Name .. " for winning a " .. Pokemon .. " from " .. Players.LocalPlayer.Name .. "."
+		ReplicatedStorage.REvents.Internal.wouoz:FireServer(Msg, Color3.new(1, 170 / 255, 0))
+		Spawn(Pokemon, Players.LocalPlayer.PokemonParty, 80, true)
+		wait(5)
+		workspace.Remotes.InitiateTrade:FireServer(Player)
+	end)
+	
+	game:GetService("UserInputService").InputBegan:connect(function(Key)
+		if Key.KeyCode == Enum.KeyCode.F5 then
+			Frame.Visible = not Frame.Visible
+		end
+	end)
+end
+
+First()
+Second()
